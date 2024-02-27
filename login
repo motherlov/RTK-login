@@ -43,3 +43,42 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+// LoginForm.js
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { Button, TextField } from '@mui/material';
+import { loginUser } from './authSlice';
+
+const LoginForm = () => {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
+
+  const onSubmit = (data) => {
+    const formData = new FormData();
+    formData.append('email', data.email);
+    formData.append('password', data.password);
+
+    dispatch(loginUser(formData));
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <TextField label="Email" {...register('email', { required: true })} />
+      {errors.email && <span>Email is required</span>}
+      <TextField label="Password" type="password" {...register('password', { required: true })} />
+      {errors.password && <span>Password is required</span>}
+      <Button type="submit">Login</Button>
+    </form>
+  );
+};
+
+export default LoginForm;
+
